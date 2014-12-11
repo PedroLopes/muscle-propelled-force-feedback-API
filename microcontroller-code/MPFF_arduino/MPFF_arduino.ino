@@ -9,14 +9,16 @@ boolean DEBUG = false;
 void setup() {
   pinMode(led, OUTPUT);
   pinMode(relay1, OUTPUT);     
-  pinMode(relay2, OUTPUT);     
+  pinMode(relay2, OUTPUT);  
+  Serial.setTimeout(10);  
   Serial.begin(9600); //speed of communications, set this on the program that interfaces with your arduino too
 }
 
 //this code is not written for optimization, but rather for simplicity for those who are not programmers
 void loop() {  
   if(Serial.available() > 0) {
-    x = Serial.parseInt();
+    x = Serial.parseInt(); //if you send data through Unity or Arduino Console, on Serial (USB)
+    //x = Serial.read(); //if you are sending data from Processing+Android
     Serial.println(x);
     digitalWrite(led, HIGH);
     //depending on the value (1-9 and 0) we do a different program:
@@ -42,9 +44,9 @@ void loop() {
       delay(delta);      
     } else if (x == 6){ // opens & closes channel 2 (default = fast)
       if (DEBUG) Serial.println("opens and closes channel 2 with wait in between");
-      digitalWrite(relay1, HIGH);
+      digitalWrite(relay2, HIGH);
       delay(delta);
-      digitalWrite(relay1, LOW);
+      digitalWrite(relay2, LOW);
       delay(delta);      
     }
     else if (x == 7){ // changes waiting time for 5 & 6 to default
