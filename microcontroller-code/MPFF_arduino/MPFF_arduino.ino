@@ -1,10 +1,23 @@
+int delta = 200; //waiting time for open/close functions (feels like a hit)
+const int MAX_INT = 32767;
+enum PLAT {
+  UNITY,
+  PYTHON,
+  ARDUINO_MONITOR,
+  PROCESSING_ANDROID
+};
+
+//Before start, choose your settings by changing the variables below
+int PLATFORM = PYTHON; // choose which platform you are sending the data from
+boolean ACK = true; //sends a message back with the message received
+boolean DEBUG = false; //prints a lot of debug information while running
+boolean ACK_READY = true; //sends a message back once USB connection is estabelished
+
+//double check where you have your relays and LED conected to
 const int led = 13; //LED for debug
 const int relay1 = 3; //arduino pin for relay 1
 const int relay2 = 4; //arduino pin for relay 1  
-int delta = 200; //waiting time for open/close functions (feels like a hit)
-int x;
-const int MAX_INT = 32767;
-boolean DEBUG = false;
+
 
 void setup() {
   pinMode(led, OUTPUT);
@@ -12,14 +25,37 @@ void setup() {
   pinMode(relay2, OUTPUT);  
   Serial.setTimeout(10);  
   Serial.begin(9600); //speed of communications, set this on the program that interfaces with your arduino too
+  if (ACK_READY) Serial.println("Ready"); // print "Ready" once
 }
 
 //this code is not written for optimization, but rather for simplicity for those who are not programmers
 void loop() {  
   if(Serial.available() > 0) {
-    x = Serial.parseInt(); //if you send data through Unity or Arduino Console, on Serial (USB)
-    //x = Serial.read(); //if you are sending data from Processing+Android
-    Serial.println(x);
+    char inByte = ' ';
+    int x;
+    switch (PLATFORM) {
+      case UNITY:  
+        //if you send data through Unity on Serial (USB)
+        x = Serial.parseInt(); 
+        if (ACK) Serial.println(x);
+        break;
+     case PYTHON: 
+       //if you send data through Python on Serial (USB)
+       inByte = Serial.read();
+       if (ACK) Serial.println(inByte); //send data back to python
+       x = inByte - '0';
+       break;
+     case ARDUINO_MONITOR:
+        //if you send data through Arduino Console, on Serial (USB)
+        x = Serial.parseInt(); 
+        if (ACK) Serial.println(x);
+        break;
+      case PROCESSING_ANDROID:
+        //if you are sending data from Processing+Android     
+        x = Serial.read(); 
+        if (ACK) Serial.println(x);
+        break;
+    }
     digitalWrite(led, HIGH);
     //depending on the value (1-9 and 0) we do a different program:
     if (x == 1) { // opens channel 1
