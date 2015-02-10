@@ -1,0 +1,10 @@
+#N canvas 0 0 450 300 10;
+#X floatatom 125 59 5 0 0 0 index - -;
+#X floatatom 125 137 5 0 0 0 x - -;
+#X floatatom 260 137 5 0 0 0 y - -;
+#X obj 125 95 index2coordinates 40 25;
+#X msg 260 55 80 25;
+#X connect 0 0 3 0;
+#X connect 3 0 1 0;
+#X connect 3 1 2 0;
+#X connect 4 0 3 1;

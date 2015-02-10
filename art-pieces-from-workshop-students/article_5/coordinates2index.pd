@@ -1,0 +1,23 @@
+#N canvas 386 67 450 300 10;
+#X text 85 23 coordinates2index: 2010 by vm creation arguments: size
+x size y (total amount of fields);
+#X obj 132 109 inlet;
+#X obj 187 110 inlet;
+#X obj 294 108 inlet;
+#X obj 294 134 unpack f f;
+#X obj 132 296 outlet;
+#X obj 294 177 \$1;
+#X obj 132 237 expr ($f2*$f3)+$f1;
+#X obj 157 179 t b f b;
+#X text 114 107 x;
+#X text 176 107 y;
+#X text 335 108 set the values;
+#X connect 1 0 7 0;
+#X connect 2 0 8 0;
+#X connect 3 0 4 0;
+#X connect 4 0 6 0;
+#X connect 6 0 7 2;
+#X connect 7 0 5 0;
+#X connect 8 0 7 0;
+#X connect 8 1 7 1;
+#X connect 8 2 6 0;
